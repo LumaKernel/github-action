@@ -6,9 +6,9 @@ const request = require('request');
 const coveralls = require('coveralls');
 
 interface WebhookResult {
-    canceled: boolean;
-    done: boolean;
-    errored: boolean;
+  canceled: boolean;
+  done: boolean;
+  errored: boolean;
 }
 
 export async function run() {
@@ -45,17 +45,18 @@ export async function run() {
     }
 
     process.env.COVERALLS_SERVICE_JOB_ID = process.env.COVERALLS_SERVICE_JOB_ID || jobId
+    jobId = process.env.COVERALLS_SERVICE_JOB_ID
 
     const endpoint = core.getInput('coveralls-endpoint');
     if (endpoint != '') {
       process.env.COVERALLS_ENDPOINT = endpoint;
     }
 
-    if(core.getInput('parallel-finished') != '') {
+    if (core.getInput('parallel-finished') != '') {
       const payload = {
         "repo_token": githubToken,
         "repo_name": process.env.GITHUB_REPOSITORY,
-        "payload": { "build_num": jobId, "status": "done" }
+        "payload": {"build_num": jobId, "status": "done"}
       };
 
       request.post({
@@ -63,19 +64,19 @@ export async function run() {
         body: payload,
         json: true
       }, (error: string, response: string, data: WebhookResult) => {
-          if (error) {
-            throw new Error(error);
-          }
-          try {
-            if (data.done) {
-              core.setOutput('coveralls-api-result', JSON.stringify(data));
-            } else {
-              throw new Error(JSON.stringify(data));
-            }
-          } catch(err) {
-            throw new Error('Parallel webhook error:' + err + ', ' + JSON.stringify(data));
-          }
+        if (error) {
+          throw new Error(error);
         }
+        try {
+          if (data.done) {
+            core.setOutput('coveralls-api-result', JSON.stringify(data));
+          } else {
+            throw new Error(JSON.stringify(data));
+          }
+        } catch (err) {
+          throw new Error('Parallel webhook error:' + err + ', ' + JSON.stringify(data));
+        }
+      }
       )
       return 0;
     }
@@ -99,7 +100,7 @@ export async function run() {
     }
 
     coveralls.handleInput(file, (err: string, body: string) => {
-      if(err){
+      if (err) {
         core.setFailed(err);
       } else {
         core.setOutput('coveralls-api-result', body);
