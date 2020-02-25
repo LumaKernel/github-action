@@ -44,7 +44,7 @@ export async function run() {
       jobId = sha;
     }
 
-    process.env.COVERALLS_SERVICE_JOB_ID = jobId
+    process.env.COVERALLS_SERVICE_JOB_ID = process.env.COVERALLS_SERVICE_JOB_ID || jobId
 
     const endpoint = core.getInput('coveralls-endpoint');
     if (endpoint != '') {
