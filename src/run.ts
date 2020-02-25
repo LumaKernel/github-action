@@ -55,7 +55,7 @@ export async function run() {
     if (core.getInput('parallel-finished') != '') {
       const payload = {
         "repo_token": githubToken,
-        // "repo_name": process.env.GITHUB_REPOSITORY,
+        "repo_name": process.env.GITHUB_REPOSITORY,
         "payload": {"build_num": jobId, "status": "done"}
       };
 
